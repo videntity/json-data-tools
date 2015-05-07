@@ -1,11 +1,12 @@
-jdt -JSON Data Tools
-====================
+jdt - JSON Data Tools
+=====================
 
 Version: 0.0.1
 
-This reposiory contains a number of command-line utilities and 
-related code libraries for parsing CSVs into JSON and loading MongoDB
- They are:
+This reposiory contains a handful of command-line utilities and 
+related code libraries for parsing CSVs into JSON and loading MongoDB.
+
+They are:
 
 * csv2mongo           - Converting a CSV into documents directly into a MongoDB datbase/collection
 * json2mongo          - Convert a JSON file object into a record in a MongoDB datbase/collection.
