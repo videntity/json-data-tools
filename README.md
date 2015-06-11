@@ -1,7 +1,7 @@
 jdt - JSON Data Tools
 =====================
 
-Version: 0.0.1
+Version: 0.0.2
 
 This reposiory contains a handful of command-line utilities and 
 related code libraries for parsing CSVs into JSON and loading MongoDB.
