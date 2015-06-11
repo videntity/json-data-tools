@@ -67,13 +67,13 @@ if len(sys.argv) > 1 and sys.argv[1] == 'bdist_wininst':
 
 
 setup(name="jdt",
-      version="0.0.1",
+      version="0.0.2",
       description="JSON Data Tools",
       long_description="""A collection of scripts for converting CSV to JSON and for importing JSON into MongoDB""",
       author="Alan Viars",
-      author_email="alan.viars@videntity.com",
-      url="https://gitbub.com/aviars/json-data-tools",
-      download_url="https://gitbub.com/aviars/json-data-tools/tarball/master",
+      author_email="sales@videntity.com",
+      url="https://gitbub.com/videntity/json-data-tools",
+      download_url="https://gitbub.com/videntity/json-data-tools/tarball/master",
       install_requires=['pymongo', ],
       packages=packages,
       scripts=['jdt/csv2mongo',
