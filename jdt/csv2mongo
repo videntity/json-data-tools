@@ -99,10 +99,10 @@ if __name__ == "__main__":
 
     
     if len(sys.argv)!=7:
-        print "Usage:"
-        print "csv2mongo [CSVFILE] [DATABASE] [COLLECTION] [DELETE_COLLECTION_BEFORE_IMPORT (T/F)]"
+        print "Usagee:", 
+        print "csv2mongo [CSVFILE] [DATABASE] [COLLECTION] [DELETE_COLLECTION_BEFORE_IMPORT (T/F)] [HOST] [PORT]"
         sys.exit(1)
-
+    print "here"
     csv_file = sys.argv[1]
     database = sys.argv[2]
     collection = sys.argv[3]
