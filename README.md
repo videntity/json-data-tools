@@ -8,8 +8,8 @@ related code libraries for parsing CSVs into JSON and loading MongoDB.
 
 They are:
 
-* csv2mongo           - Converting a CSV into documents directly into a MongoDB database/collection
-* json2mongo          - Convert a JSON file object into a record in a MongoDB database/collection
+* csv2mongo           - Converting a CSV into documents directly into a MongoDB database/collection.
+* json2mongo          - Convert a JSON file object into a record in a MongoDB database/collection.
 * jsondir2mongo       - Convert a directory of files containing JSON objects into documents in a MongoDB database/collection.
 
 Installation
