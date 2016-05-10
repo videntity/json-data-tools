@@ -3,13 +3,13 @@ jdt - JSON Data Tools
 
 Version: 0.0.2
 
-This reposiory contains a handful of command-line utilities and 
+This repository contains a handful of command-line utilities and 
 related code libraries for parsing CSVs into JSON and loading MongoDB.
 
 They are:
 
-* csv2mongo           - Converting a CSV into documents directly into a MongoDB datbase/collection
-* json2mongo          - Convert a JSON file object into a record in a MongoDB datbase/collection.
+* csv2mongo           - Converting a CSV into documents directly into a MongoDB database/collection
+* json2mongo          - Convert a JSON file object into a record in a MongoDB database/collection
 * jsondir2mongo       - Convert a directory of files containing JSON objects into documents in a MongoDB database/collection.
 
 Installation
@@ -71,7 +71,7 @@ jsondir2mongo
 
 `jsondir2mongo` imports a directory containing files of JSON objects to MongoDB documents.
  The files are checked for validity (i.e. {}) before attempting to import it each into
- MongoDB. Files that are not JSON objects are automatically skipped.  A summary is retuned with the process ends
+ MongoDB. Files that are not JSON objects are automatically skipped.  A summary is returned when the process ends.
 
 Usage:
 
@@ -88,7 +88,7 @@ Example output:
 
     Clearing the collection prior to import.
 
-Start the import of the directory data into the collection test within the database csv2json .
+Start the import of the directory data into the collection test within the database csv2json.
 
 
     {
