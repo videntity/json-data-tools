@@ -3,7 +3,7 @@ jdt - JSON Data Tools
 
 Version: 0.0.2
 
-This repository contains a handful of command-line utilities and 
+This repository contains a handful of command-line utilities and
 related code libraries for parsing CSVs into JSON and loading MongoDB.
 
 They are:
@@ -15,15 +15,15 @@ They are:
 Installation
 ------------
 
-You can install the tool using `pip`. 
+You can install the tool using `pip`.
 
 To install with pip just type:
 
     ~$ sudo pip install jdt
 
-Note: If you use `sudo`, the scripts  will be installed at the 
-system level and used by all users. Add  `--upgrade` to the above 
-install instructions to ensure you fetch the newest version. 
+Note: If you use `sudo`, the scripts  will be installed at the
+system level and used by all users. Add  `--upgrade` to the above
+install instructions to ensure you fetch the newest version.
 
 
 
@@ -36,12 +36,12 @@ header row are auto-fixed by converting to ` `, `_`, or `-`.
 
 Usage:
 
-    ~$ csv2mongo [CSVFILE] [DATABASE] [COLLECTION] [DELETE_COLLECTION_BEFORE_IMPORT (T/F)]
+    ~$ csv2mongo [CSVFILE] [DATABASE] [COLLECTION] [DELETE_COLLECTION_BEFORE_IMPORT (T/F)] [HOST] [PORT]
 
 
 Example:
 
-    ~$ csv2mongo npidata_20050523-20140413.csv npi nppes T
+    ~$ csv2mongo npidata_20050523-20140413.csv npi nppes T 127.0.0.1 27017
 
 
 
@@ -55,13 +55,12 @@ for validity (i.e. {}) before attempting to import it into MongoDB.
 
 Usage:
 
-    ~$ json2mongo [JSONFILE] [DATABASE] [COLLECTION] [DELETE_COLLECTION_BEFORE_IMPORT (T/F)]
-
+    ~$ json2mongo [JSONFILE] [DATABASE] [COLLECTION] [DELETE_COLLECTION_BEFORE_IMPORT (T/F)] [HOST] [PORT]
 
 Example:
 
 
-    ~$ json2mongo test.json npi nppes T
+    ~$ json2mongo test.json npi nppes T 127.0.0.1 27017
 
 
 
@@ -75,13 +74,13 @@ jsondir2mongo
 
 Usage:
 
-    ~$ json2mongo [JSONFILE] [DATABASE] [COLLECTION] [DELETE_COLLECTION_BEFORE_IMPORT (T/F)]
+    ~$ json2mongo [JSONFILE] [DATABASE] [COLLECTION] [DELETE_COLLECTION_BEFORE_IMPORT (T/F)] [HOST] [PORT]
 
 
 Example:
 
 
-    ~$ json2mongo data npi nppes T
+    ~$ json2mongo data npi nppes T 127.0.0.1 27017
 
 Example output:
 

@@ -25,7 +25,7 @@ def csv2mongo( csvfile, database_name="database1",
 
 
     response_dict = OrderedDict()
-    print "Start the import of", csvfile, "into the collection", collection_name, "within the database", database_name, "."
+    print("Start the import of", csvfile, "into the collection", collection_name, "within the database", database_name, ".")
 
     try:
 
@@ -38,13 +38,13 @@ def csv2mongo( csvfile, database_name="database1",
             response_dict['info'] = ["The collection was cleared prior to import.", ]
 
         #open the csv file.
-        csvhandle = csv.reader(open(csvfile, 'rb'), delimiter=',')
+        csvhandle = csv.reader(open(csvfile, 'r'), delimiter=',')
 
         rowindex    = 0
         mongoindex  = 0
         error_list  = []
 
-        
+
         for row in csvhandle :
 
             if rowindex==0:
@@ -91,18 +91,18 @@ def csv2mongo( csvfile, database_name="database1",
     except:
         response_dict['code']    = 500
         response_dict['errors']  = [str(sys.exc_info()), ]
-        
+
 
     return response_dict
 
 if __name__ == "__main__":
 
-    
+
     if len(sys.argv)!=7:
-        print "Usagee:", 
-        print "csv2mongo [CSVFILE] [DATABASE] [COLLECTION] [DELETE_COLLECTION_BEFORE_IMPORT (T/F)] [HOST] [PORT]"
+        print("Usage:"),
+        print("csv2mongo [CSVFILE] [DATABASE] [COLLECTION] [DELETE_COLLECTION_BEFORE_IMPORT (T/F)] [HOST] [PORT]")
         sys.exit(1)
-    print "here"
+    print("here")
     csv_file = sys.argv[1]
     database = sys.argv[2]
     collection = sys.argv[3]
@@ -116,7 +116,7 @@ if __name__ == "__main__":
         delete_collection_before_import = False
     result = csv2mongo(csv_file, database, collection, delete_collection_before_import,
                        host, port)
-    
-    
+
+
     #output the JSON transaction summary
-    print json.dumps(result, indent =4)
+    print(json.dumps(result, indent =4))
