@@ -25,7 +25,6 @@ def csv2mongo( csvfile, database_name="database1",
 
 
     response_dict = OrderedDict()
-    print("Start the import of", csvfile, "into the collection", collection_name, "within the database", database_name, ".")
 
     try:
 
@@ -102,7 +101,6 @@ if __name__ == "__main__":
         print("Usage:"),
         print("csv2mongo [CSVFILE] [DATABASE] [COLLECTION] [DELETE_COLLECTION_BEFORE_IMPORT (T/F)] [HOST] [PORT]")
         sys.exit(1)
-    print("here")
     csv_file = sys.argv[1]
     database = sys.argv[2]
     collection = sys.argv[3]
