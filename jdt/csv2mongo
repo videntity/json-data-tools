@@ -34,7 +34,6 @@ def csv2mongo( csvfile, database_name="database1",
 
         if delete_collection_before_import:
             myobjectid=collection.remove({})
-            response_dict['info'] = ["The collection was cleared prior to import.", ]
 
         #open the csv file.
         csvhandle = csv.reader(open(csvfile, 'r'), delimiter=',')
