@@ -21,9 +21,8 @@ def jsondir2mongo( json_dir, database_name,
                port=MONGO_PORT):
     """Return a response_dict with a summary of jsondir2mongo transaction."""
 
-    
-    
-    print "Start the import of the directory", json_dir, "into the collection", collection_name, "within the database", database_name, "."
+
+
     fileindex = 0
     mongoindex = 0
     error_list =[]
@@ -34,40 +33,39 @@ def jsondir2mongo( json_dir, database_name,
         mc =   MongoClient(host=host, port=port)
         db          =   mc[database_name]
         collection  =  db[collection_name]
-        
+
         if delete_collection_before_import:
             myobjectid=collection.remove({})
-            response_dict['info'] = ["The collection was cleared prior to import.", ]
-            print "The collection was cleared prior to import."
-        
+            # print("The collection was cleared prior to import.")
+
         #get the files in the specified directory
         #print "Getting a list of all files for importing from", json_dir
         for root, dirs, files in os.walk(json_dir):
             for file in files:
                 if file.endswith(".json") or file.endswith(".js"):
                     onlyfiles.append(os.path.join(root, file))
-        
-        #print "Done creating file list. Begin file import."    
+
+        #print "Done creating file list. Begin file import."
         for f in onlyfiles:
             j = None
-            error_message = ""    
-            
+            error_message = ""
+
             fh = open(f, 'rU')
             fileindex += 1
             j = fh.read()
             fh.close()
-            
+
             try:
                 j = json.loads(j, object_pairs_hook=OrderedDict)
                 if type(j) != type(OrderedDict()):
                     error_message = "File " + f +  " did not contain a json object, i.e. {}."
                     error_list.append(error_message)
-            
+
             except :
-            
+
                 error_message = "File " + f +  " did not contain valid JSON."
                 error_list.append(error_message)
-                    
+
             if not error_message:
                 try:
                     myobjectid=collection.insert(j)
@@ -91,7 +89,7 @@ def jsondir2mongo( json_dir, database_name,
                 response_dict['code']=200
                 response_dict['message']="Completed without errors."
 
-    
+
     except:
         response_dict = {}
         response_dict['num_files_attempted']=fileindex
@@ -105,10 +103,10 @@ def jsondir2mongo( json_dir, database_name,
 
 if __name__ == "__main__":
 
-    
+
     if len(sys.argv)!=7:
-        print "Usage:"
-        print "json2dirmongo [JSON_DIR] [DATABASE] [COLLECTION] [DELETE_COLLECTION_BEFORE_IMPORT (T/F)] [HOST] [PORT]"
+        print("Usage:")
+        print("json2dirmongo [JSON_DIR] [DATABASE] [COLLECTION] [DELETE_COLLECTION_BEFORE_IMPORT (T/F)] [HOST] [PORT]")
         sys.exit(1)
 
     json_dir                        = sys.argv[1]
@@ -124,4 +122,4 @@ if __name__ == "__main__":
         delete_collection_before_import = False
     result = jsondir2mongo(json_dir, database, collection,
                            delete_collection_before_import, host, port)
-    print json.dumps(result, indent =4)
+    print(json.dumps(result, indent =4))
