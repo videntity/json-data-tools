@@ -74,13 +74,13 @@ jsondir2mongo
 
 Usage:
 
-    ~$ json2mongo [JSONFILE] [DATABASE] [COLLECTION] [DELETE_COLLECTION_BEFORE_IMPORT (T/F)] [HOST] [PORT]
+    ~$ jsondir2mongo [JSONFILE] [DATABASE] [COLLECTION] [DELETE_COLLECTION_BEFORE_IMPORT (T/F)] [HOST] [PORT]
 
 
 Example:
 
 
-    ~$ json2mongo data npi nppes T 127.0.0.1 27017
+    ~$ json2dirmongo data npi nppes T 127.0.0.1 27017
 
 Example output:
 
