@@ -34,8 +34,7 @@ def json2mongo(jsonfile, database_name ,
     collection  = db[collection_name]
 
     if delete_collection_before_import:
-        myobjectid=collection.remove({})
-
+        db.drop_collection(collection)
     fh = open(jsonfile, 'rU')
 
     j = fh.read()

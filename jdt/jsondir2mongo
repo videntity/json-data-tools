@@ -35,7 +35,7 @@ def jsondir2mongo( json_dir, database_name,
         collection  =  db[collection_name]
 
         if delete_collection_before_import:
-            myobjectid=collection.remove({})
+            db.drop_collection(collection)
             # print("The collection was cleared prior to import.")
 
         #get the files in the specified directory

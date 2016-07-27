@@ -33,7 +33,7 @@ def csv2mongo( csvfile, database_name="database1",
         collection  =  db[collection_name]
 
         if delete_collection_before_import:
-            myobjectid=collection.remove({})
+            db.drop_collection(collection)
 
         #open the csv file.
         csvhandle = csv.reader(open(csvfile, 'r'), delimiter=',')
