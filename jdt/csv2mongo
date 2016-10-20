@@ -3,28 +3,25 @@
 # vim: ai ts=4 sts=4 et sw=4
 # Alan Viars
 
-from pymongo import MongoClient
-import os
-import sys
-import string
-import json
-import csv
-from collections import OrderedDict
 import argparse
+import csv
 import functools
+import hashlib
+import json
+import os
 import pymongo
 import time
-import hashlib
+import traceback
+import string
+import sys
+from collections import OrderedDict
+from pymongo import MongoClient
 
-MONGO_HOST = "127.0.0.1"
-MONGO_PORT = 27017
 
-
-def csv2mongo(csvfile, database_name="database1",
-              collection_name="collection1",
-              delete_collection_before_import=False,
-              host=MONGO_HOST,
-              port=MONGO_PORT):
+def csv2mongo(csvfile, database_name,
+              collection_name,
+              delete_collection_before_import,
+              host, port):
     """Return a response_dict with summary of csv2mongo transaction."""
 
     response_dict = OrderedDict()
@@ -90,42 +87,48 @@ def csv2mongo(csvfile, database_name="database1",
 
     except:
         response_dict['code'] = 500
-        response_dict['errors'] = [str(sys.exc_info()), ]
+        response_dict['errors'] = [traceback.print_exc()]
 
     return response_dict
 
 if __name__ == "__main__":
-
-    parser = argparse.ArgumentParser(description='Process xml UGE file to CSV')
+    # Parse args
+    parser = argparse.ArgumentParser(description='Load in CSV doc to MongoDB')
     parser.add_argument(
-        dest='input_uge_file',
-        help="Input the UGE file to parse here")
+        dest='input_csv_file',
+        action='store',
+        help='Input the CSV file to load here')
     parser.add_argument(
-        dest='output_dir_name',
-        help="Enter the output file where you want the created CSV files to be")
+        dest='db_name',
+        action='store',
+        help="Enter the Database name you want to import the CSV to")
+    parser.add_argument(
+        dest='collection_name',
+        action='store',
+        help="Enter the Collection name within the Database specified that you want the CSV to be imported to")
+    parser.add_argument('-d', '--delete', dest='delete', action='store_true',
+                        help='Delete previous collection upon import')
+    parser.add_argument(
+        '--host',
+        dest='host',
+        action='store',
+        default='127.0.0.1',
+        help='Specify host. Default is 127.0.0.1 ')
+    parser.add_argument(
+        '-p',
+        '--port',
+        dest='port',
+        action='store',
+        default=27017,
+        help='Specify port. Default is 27017')
     args = parser.parse_args()
-    input_file = args.input_uge_file
-    output_dir = args.output_dir_name
+    csv_file = args.input_csv_file
+    database = args.db_name
+    collection = args.collection_name
+    delete_collection_before_import = args.delete
+    host = args.host
+    port = args.port
 
-    result = process_all(input_file, output_dir)
-    print(result)
-
-    if len(sys.argv) != 7:
-        print("Usage:"),
-        print(
-            "csv2mongo [CSVFILE] [DATABASE] [COLLECTION] [DELETE_COLLECTION_BEFORE_IMPORT (T/F)] [HOST] [PORT]")
-        sys.exit(1)
-    csv_file = sys.argv[1]
-    database = sys.argv[2]
-    collection = sys.argv[3]
-    delete_collection_before_import = sys.argv[4]
-    host = sys.argv[5]
-    port = int(sys.argv[6])
-
-    if sys.argv[4].lower() in ('t', 'true', '1'):
-        delete_collection_before_import = True
-    else:
-        delete_collection_before_import = False
     result = csv2mongo(
         csv_file,
         database,

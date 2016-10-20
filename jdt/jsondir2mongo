@@ -3,26 +3,23 @@
 # vim: ai ts=4 sts=4 et sw=4
 # Alan Viars
 
-from pymongo import MongoClient
-import os
-import sys
-import string
-import json
-from collections import OrderedDict
-
+import argparse
 import functools
+import hashlib
+import json
+import os
 import pymongo
 import time
-import hashlib
-
-MONGO_HOST = "127.0.0.1"
-MONGO_PORT = 27017
+import string
+import sys
+from collections import OrderedDict
+from pymongo import MongoClient
 
 
 def jsondir2mongo(json_dir, database_name,
                   collection_name,
-                  delete_collection_before_import=False, host=MONGO_HOST,
-                  port=MONGO_PORT):
+                  delete_collection_before_import, host,
+                  port):
     """Return a response_dict with a summary of jsondir2mongo transaction."""
 
     fileindex = 0
@@ -38,16 +35,16 @@ def jsondir2mongo(json_dir, database_name,
 
         if delete_collection_before_import:
             db.drop_collection(collection)
-            # print("The collection was cleared prior to import.")
+            print("The collection was cleared prior to import.")
 
         # get the files in the specified directory
-        # print "Getting a list of all files for importing from", json_dir
+        print("Getting a list of all files for importing from", json_dir)
         for root, dirs, files in os.walk(json_dir):
             for file in files:
                 if file.endswith(".json") or file.endswith(".js"):
                     onlyfiles.append(os.path.join(root, file))
 
-        # print "Done creating file list. Begin file import."
+        print("Done creating file list. Begin file import.")
         for f in onlyfiles:
             j = None
             error_message = ""
@@ -104,23 +101,51 @@ def jsondir2mongo(json_dir, database_name,
 
 if __name__ == "__main__":
 
-    if len(sys.argv) != 7:
-        print("Usage:")
-        print(
-            "json2dirmongo [JSON_DIR] [DATABASE] [COLLECTION] [DELETE_COLLECTION_BEFORE_IMPORT (T/F)] [HOST] [PORT]")
-        sys.exit(1)
+    # Parse args
+    parser = argparse.ArgumentParser(
+        description='Load in directory which contains JSON docs to MongoDB')
+    parser.add_argument(
+        dest='input_JSON_dir',
+        action='store',
+        help='Input the JSON dir to load here')
+    parser.add_argument(
+        dest='db_name',
+        action='store',
+        help="Enter the Database name you want to import the JSON to")
+    parser.add_argument(
+        dest='collection_name',
+        action='store',
+        help="Enter the Collection name within the Database specified that you want the JSON to be imported to")
+    parser.add_argument('-d', '--delete', dest='delete', action='store_true',
+                        help='Delete previous collection upon import')
+    parser.add_argument(
+        '--host',
+        dest='host',
+        action='store',
+        default='127.0.0.1',
+        help='Specify host. Default is 127.0.0.1 ')
+    parser.add_argument(
+        '-p',
+        '--port',
+        dest='port',
+        action='store',
+        default=27017,
+        help='Specify port. Default is 27017')
+    args = parser.parse_args()
+    json_dir = args.input_JSON_dir
+    database = args.db_name
+    collection = args.collection_name
+    delete_collection_before_import = args.delete
+    host = args.host
+    port = args.port
 
-    json_dir = sys.argv[1]
-    database = sys.argv[2]
-    collection = sys.argv[3]
-    delete_collection_before_import = sys.argv[4]
-    host = sys.argv[5]
-    port = int(sys.argv[6])
+    result = jsondir2mongo(
+        json_dir,
+        database,
+        collection,
+        delete_collection_before_import,
+        host,
+        port)
 
-    if sys.argv[4].lower() in ('t', 'true', '1'):
-        delete_collection_before_import = True
-    else:
-        delete_collection_before_import = False
-    result = jsondir2mongo(json_dir, database, collection,
-                           delete_collection_before_import, host, port)
+    # output the JSON transaction summary
     print(json.dumps(result, indent=4))
