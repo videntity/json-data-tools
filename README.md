@@ -25,7 +25,27 @@ Note: If you use `sudo`, the scripts  will be installed at the
 system level and used by all users. Add  `--upgrade` to the above
 install instructions to ensure you fetch the newest version.
 
+This library assumes you have MongoDB installed and running. See http://docs.mongodb.org/manual/installation/ for more installation and instructions for your OS.
 
+General Usage
+-------------
+
+For info about each command type:
+    
+    `<command> -h`
+
+The general rule is:
+
+    <command> <file/dir to load> <db_name> <collection_name>
+
+By default, if you pass in db/collection name that already exists in your MongoDB, the import will only add to it. If you pass the `-d` option to a command, the specified collections will be dropped before importing the new data.
+
+Also by default:
+
+    Host = 127.0.0.1
+    Port = 27017
+    
+These options can be changed with the --host and --port options respectively.
 
 csv2mongo
 ---------
@@ -36,12 +56,19 @@ header row are auto-fixed by converting to ` `, `_`, or `-`.
 
 Usage:
 
-    ~$ csv2mongo [CSVFILE] [DATABASE] [COLLECTION] [DELETE_COLLECTION_BEFORE_IMPORT (T/F)] [HOST] [PORT]
+    ~$ csv2mongo [CSVFILE] [DATABASE] [COLLECTION] 
 
 
 Example:
 
-    ~$ csv2mongo npidata_20050523-20140413.csv npi nppes T 127.0.0.1 27017
+    ~$ csv2mongo npidata_20050523-20140413.csv npi_database npi_collection
+
+    {
+    "num_rows_imported": 9, 
+    "num_csv_rows": 10, 
+    "code": 200, 
+    "message": "Completed."
+    }
 
 
 
@@ -55,12 +82,19 @@ for validity (i.e. {}) before attempting to import it into MongoDB.
 
 Usage:
 
-    ~$ json2mongo [JSONFILE] [DATABASE] [COLLECTION] [DELETE_COLLECTION_BEFORE_IMPORT (T/F)] [HOST] [PORT]
+    ~$ json2mongo [JSONFILE] [DATABASE] [COLLECTION] 
 
 Example:
 
 
-    ~$ json2mongo test.json npi nppes T 127.0.0.1 27017
+    ~$ json2mongo test.json npi nppes 
+    
+    {
+    "num_rows_imported": 1, 
+    "num_file_errors": 0, 
+    "code": 200, 
+    "message": "Completed without errors."
+    }
 
 
 
@@ -68,19 +102,17 @@ jsondir2mongo
 -------------
 
 
-`jsondir2mongo` imports a directory containing files of JSON objects to MongoDB documents.
- The files are checked for validity (i.e. {}) before attempting to import it each into
- MongoDB. Files that are not JSON objects are automatically skipped.  A summary is returned when the process ends.
+`jsondir2mongo` imports a directory containing files of JSON objects to MongoDB documents. It will walk through subdirectories as well, looking for JSON files. The files are checked for validity (i.e. {}) before attempting to import it each into MongoDB. Files that are not JSON objects are automatically skipped.  A summary is returned when the process ends.
 
 Usage:
 
-    ~$ jsondir2mongo [JSONFILE] [DATABASE] [COLLECTION] [DELETE_COLLECTION_BEFORE_IMPORT (T/F)] [HOST] [PORT]
+    ~$ jsondir2mongo [JSONFILE] [DATABASE] [COLLECTION]
 
 
 Example:
 
 
-    ~$ json2dirmongo data npi nppes T 127.0.0.1 27017
+    ~$ json2dirmongo data npi nppes 
 
 Example output:
 
@@ -90,21 +122,19 @@ Example output:
 Start the import of the directory data into the collection test within the database csv2json.
 
 
+    ('Getting a list of all files for importing from', '../provider-data-tools/tests')
+    Done creating file list. Begin file import.
     {
-            "info": [
-                "The collection was cleared prior to import."
-            ],
-            "num_files_attempted": 4,
-            "num_files_imported": 2,
-            "num_file_errors": 2,
-            "errors": [
-                "File data/3.json did not contain a json object, i.e. {}.",
-                "File data/4.json did not contain valid JSON."
-            ],
-            "code": 400,
-            "message": "Completed with errors."
-        }
+        "num_files_attempted": 31, 
+        "num_files_imported": 30, 
+        "num_file_errors": 1, 
+        "errors": [
+            "Error writing ../provider-data-tools/tests/json_schema_test.json to Mongo. (<class 'bson.errors.InvalidDocument'>, InvalidDocument(\"key '$schema' must not start with '$'\",), <traceback object at 0x7fe1941fa3b0>)"
+        ], 
+        "code": 400, 
+        "message": "Completed with errors."
+    }
 
 
-In the above example, the files `1.json` and `2.json` were processed while `3.json` and
-`4.json` were not imported.
+
+In the above example, 30/31 JSON files were imported. The error reported that json_schema_test.json was an invalid JSON document and pointed out why.
