@@ -72,7 +72,7 @@ if len(sys.argv) > 1 and sys.argv[1] == 'bdist_wininst':
 
 setup(
     name="jdt",
-    version="0.1",
+    version="0.2",
     description="JSON Data Tools",
     long_description="""A collection of scripts for converting CSV to JSON and for importing JSON into MongoDB""",
     author="Alan Viars",
