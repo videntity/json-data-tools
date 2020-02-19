@@ -72,15 +72,15 @@ if len(sys.argv) > 1 and sys.argv[1] == 'bdist_wininst':
 
 setup(
     name="jdt",
-    version="0.3",
+    version="0.4.1",
     description="JSON Data Tools",
-    long_description="""A collection of scripts for converting CSV to JSON and for importing JSON into MongoDB""",
+    long_description="""A collection of scripts for working with CSV, JSON, and NDJSON for importing into MongoDB and FHIR.""",
     author="Alan Viars",
     author_email="sales@videntity.com",
-    url="https://gitbub.com/videntity/json-data-tools",
+    url="https://github.com/videntity/json-data-tools",
     download_url="https://gitbub.com/videntity/json-data-tools/tarball/master",
     install_requires=[
-        'pymongo', 'ndjson', 'requests',
+        'pymongo', 'ndjson', 'requests', 'pysftp',
     ],
     packages=packages,
     scripts=[
@@ -91,4 +91,5 @@ setup(
         'jdt/ndjsonurl2mongo',
         'jdt/ndjson2fhir',
         'jdt/ndjsonurl2fhir',
+        'jdt/sftp_import_bulk_claims'
     ])

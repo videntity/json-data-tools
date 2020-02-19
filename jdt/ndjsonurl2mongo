@@ -23,7 +23,7 @@ def ndjsonurl2mongo(ndjson_url, database_name,
                  host,
                  port):
     """Return a response_dict with a summary of ndjson2mongo transaction."""
-    print("Start the import of", ndjson_url, "into the collection")
+    print("Start the import of", ndjson_url, "into the collection", collection_name, ".")
     # collection_name, "within the database", database_name, "."
 
     response_dict = OrderedDict()

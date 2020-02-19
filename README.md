@@ -4,8 +4,8 @@ jdt - JSON Data Tools
 Version: 0.3
 
 This repository contains a handful of command-line utilities and related code libraries for
-parsing CSVs, JSON, directroies of JSON files, and [Newline Delimited JSON].(http://ndjson.org/) and loading then into MongoDB and/or
-[FHIR](https://www.hl7.org/fhir/) servers.
+parsing CSVs, JSON, directroies of JSON files, and [Newline Delimited JSON].(http://ndjson.org/) 
+and loading then into MongoDB and/or [FHIR](https://www.hl7.org/fhir/) servers.
 
 
 The command-line utilities are:

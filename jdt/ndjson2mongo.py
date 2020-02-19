@@ -4,14 +4,7 @@
 # Alan Viars
 
 import argparse
-import functools
-import hashlib
 import json
-import os
-import pymongo
-import time
-import string
-import sys
 from collections import OrderedDict
 from pymongo import MongoClient
 import ndjson
@@ -22,7 +15,9 @@ def ndjson2mongo(ndjsonfile, database_name,
                  delete_collection_before_import,
                  host,
                  port):
-    print("Start the import of", ndjsonfile, "into the collection")
+    """Return a response_dict with a summary of ndjson2mongo transaction."""
+    print("Start the import of", ndjsonfile,
+          "into the collection", collection_name, ".")
     # collection_name, "within the database", database_name, "."
 
     response_dict = OrderedDict()
@@ -44,14 +39,14 @@ def ndjson2mongo(ndjsonfile, database_name,
             try:
                 if not isinstance(item, type(OrderedDict())):
                     error_message = "File " + \
-                        str(jsonfile) + " did not contain a JSON object, i.e. {}."
+                        str(ndjsonfile) + " did not contain a JSON object, i.e. {}."
                     error_list.append(error_message)
                 # insert the item/document
                 myobjectid = collection.insert(item)
                 mongoindex += 1
 
             except:
-                #print(sys.exc_info())
+                # print(sys.exc_info())
                 error_message = "File " + \
                     str(item) + " did not contain valid JSON."
                 error_list.append(error_message)
