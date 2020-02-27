@@ -26,8 +26,6 @@ def ndjsonurl2fhir(ndjson_url, fhir_base_url):
     ids = []
     response = requests.get(ndjson_url)
     items = response.json(cls=ndjson.Decoder, object_pairs_hook=OrderedDict)
-    
-    
 
     for item in items:
         # print("item",item)

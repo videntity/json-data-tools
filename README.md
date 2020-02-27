@@ -1,29 +1,40 @@
 jdt - JSON Data Tools
 =====================
 
-Version: 0.3
+Version: 0.4.2
 
 This repository contains a handful of command-line utilities and related code libraries for
-parsing CSVs, JSON, directroies of JSON files, and [Newline Delimited JSON].(http://ndjson.org/) 
-and loading then into MongoDB and/or [FHIR](https://www.hl7.org/fhir/) servers.
+processing CSV, JSON, and [Newline Delimited JSON].(http://ndjson.org/) files.
+
+It also contains tools for loading then into:
 
 
-The command-line utilities are:
+* MongoDB
+* [FHIR](https://www.hl7.org/fhir/) servers.
 
-* csv2mongo           - Converting a CSV into documents directly into a MongoDB database/collection.
-* json2mongo          - Convert a JSON file object into a record into a MongoDB database/collection.
-* jsondir2mongo       - Convert a directory of files containing JSON objects into documents and import them into a MongoDB database/collection.
-* ndjson2mongo        - Import an ndjson file into a MongoDB database/collection.
-* ndjsonurl2mongo     - Import an ndjson file, at a given URL, into a MongoDB database/collection.
-* ndjson2fhir         - Import an ndjson file into a FHIR server using POST/CREATE (experimental).
-* ndjsonurl2fhir      - Import an ndjson file, at a given URL, into a FHIR server using POST/CREATE (experimental).
+_Please consider a code contribution for imports into CouchDB, Redis, Elastic Search, etc :-)_
+
+
+The command-line utilities are as folloes:
+
+* `csv2mongo`           - Converting a CSV into documents directly into a MongoDB database/collection.
+* `json2mongo`          - Convert a JSON file object into a record into a MongoDB database/collection.
+* `jsondir2ndjson`      - Traverse a directory path and convert all JSON documents into a single NDJSON file.  
+* `ndjson2mongo`        - Import an NDJSON file into a MongoDB database/collection.
+* `ndjsonurl2mongo`     - Import an NDJSON file, at a given URL, into a MongoDB database/collection.
+* `ndjson2fhir`         - Import an NDJSON file into a FHIR server using POST/CREATE (experimental).
+* `ndjsonurl2fhir`      - Import an NDJSON file, at a given URL, into a FHIR server using POST/CREATE (experimental).
+* `sftp-ndjson2mongo`   - Download files from SFTP, then import NDJSON and CSV and import them into MongoDB.  
+
 
 Installation
 ------------
 
+
 You can install the tool using `pip`.
 
 To install with pip just type:
+
 
     ~$ sudo pip install jdt
 
