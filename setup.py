@@ -72,9 +72,9 @@ if len(sys.argv) > 1 and sys.argv[1] == 'bdist_wininst':
 
 setup(
     name="jdt",
-    version="0.4.1",
+    version="0.4.2",
     description="JSON Data Tools",
-    long_description="""A collection of scripts for working with CSV, JSON, and NDJSON for importing into MongoDB and FHIR.""",
+    long_description="""A collection of scripts for working with CSV, JSON, and NDJSON and importing into MongoDB and FHIR.""",
     author="Alan Viars",
     author_email="sales@videntity.com",
     url="https://github.com/videntity/json-data-tools",
@@ -86,10 +86,10 @@ setup(
     scripts=[
         'jdt/csv2mongo',
         'jdt/json2mongo',
-        'jdt/jsondir2mongo',
+        'jdt/jsondir2ndjson',
         'jdt/ndjson2mongo',
         'jdt/ndjsonurl2mongo',
         'jdt/ndjson2fhir',
         'jdt/ndjsonurl2fhir',
-        'jdt/sftp_import_bulk_claims'
+        'jdt/sftp_ndjson2mongo'
     ])
