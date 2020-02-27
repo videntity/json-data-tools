@@ -1,0 +1,81 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# vim: ai ts=4 sts=4 et sw=4
+# Transparent Health
+
+import argparse
+from jdt.sftp_ndjson2mongo import download_files_from_ftp
+from jdt.sftp_ndjson2mongo import import_files_into_mongo
+
+
+if __name__ == "__main__":
+
+    # Parse args
+    parser = argparse.ArgumentParser(
+        description='Load all CSVs and NDJSON files into on MongoDB database.')
+
+    parser.add_argument(
+        dest='sftp_host',
+        action='store',
+        help="Enter the SFTP host name.")
+
+    parser.add_argument(
+        dest='sftp_username',
+        action='store',
+        help="Enter the SFTP user name.")
+
+    parser.add_argument(
+        dest='sftp_private_key_path',
+        action='store',
+        help="Enter the SFTP private key path.")
+
+    parser.add_argument(
+        dest='known_hosts_path',
+        action='store',
+        help="The full path to your known hosts file. Hint: Its often /home/[user]/.ssh/known_hosts.")
+
+    parser.add_argument(
+        dest='remote_path_to_download',
+        action='store',
+        help="The remote_path on the SFTP server from which to download CSV and NDJSON files.")
+
+    parser.add_argument(
+        dest='local_destination_path',
+        action='store',
+        help="The local path where files will be downloaded. This directory must exist.")
+
+    parser.add_argument(
+        dest='db_name',
+        action='store',
+        help="""Enter the database name you want to import the NDJSON and
+        CSV to. The collection name is created form the file name.""")
+
+    parser.add_argument('-d', '--delete', dest='delete', action='store_true',
+                        help='Delete previous collection upon import')
+
+    parser.add_argument(
+        '--host',
+        dest='host',
+        action='store',
+        default='127.0.0.1',
+        help='Specify MongoDB host. Default is 127.0.0.1 ')
+
+    parser.add_argument(
+        '-p',
+        '--port',
+        dest='port',
+        action='store',
+        default=27017,
+        help='Specify MongoDB port. Default is 27017')
+    args = parser.parse_args()
+
+    downloaded_list = download_files_from_ftp(args.sftp_host,
+                                              args.sftp_username,
+                                              args.sftp_private_key_path,
+                                              args.known_hosts_path,
+                                              args.remote_path_to_download,
+                                              args.local_destination_path,
+                                              )
+    import_files_into_mongo(downloaded_list, args.db_name,
+                            args.delete, args.host, args.port)
+    print("Done.")

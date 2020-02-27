@@ -4,38 +4,24 @@
 # Alan Viars
 
 import argparse
-import functools
-import hashlib
 import json
 import os
-import pymongo
-import time
-import string
+import ndjson
 import sys
 from collections import OrderedDict
-from pymongo import MongoClient
 
 
-def jsondir2mongo(json_dir, database_name,
-                  collection_name,
-                  delete_collection_before_import, host,
-                  port):
-    """Return a response_dict with a summary of jsondir2mongo transaction."""
+def jsondir2ndjson(json_dir, output_filename):
+    """Convert all json files under a path into a single ndjson file."""
 
     fileindex = 0
-    mongoindex = 0
     error_list = []
+    success_index = 0
     response_dict = OrderedDict()
     onlyfiles = []
     try:
-
-        mc = MongoClient(host=host, port=port)
-        db = mc[database_name]
-        collection = db[collection_name]
-
-        if delete_collection_before_import:
-            db.drop_collection(collection)
-            print("The collection was cleared prior to import.")
+        out_fh = open(output_filename, 'w')
+        writer = ndjson.writer(out_fh)
 
         # get the files in the specified directory
         print("Getting a list of all files for importing from", json_dir)
@@ -44,7 +30,6 @@ def jsondir2mongo(json_dir, database_name,
                 if file.endswith(".json") or file.endswith(".js"):
                     onlyfiles.append(os.path.join(root, file))
 
-        print("Done creating file list. Begin file import.")
         for f in onlyfiles:
             j = None
             error_message = ""
@@ -59,24 +44,23 @@ def jsondir2mongo(json_dir, database_name,
                 if not isinstance(j, type(OrderedDict())):
                     error_message = "File " + f + " did not contain a json object, i.e. {}."
                     error_list.append(error_message)
-
             except:
-
                 error_message = "File " + f + " did not contain valid JSON."
                 error_list.append(error_message)
 
             if not error_message:
+                # add the object to the output file.
                 try:
-                    myobjectid = collection.insert(j)
-                    mongoindex += 1
+                    writer.writerow(j)
+                    success_index += 1
                 except:
                     error_message = "Error writing " + f + \
-                        " to Mongo. " + str(sys.exc_info())
+                        " to NDJSON. " + str(sys.exc_info())
                     error_list.append(error_message)
 
         if error_list:
             response_dict['num_files_attempted'] = fileindex
-            response_dict['num_files_imported'] = mongoindex
+            response_dict['num_files_imported'] = success_index
             response_dict['num_file_errors'] = len(error_list)
             response_dict['errors'] = error_list
             response_dict['code'] = 400
@@ -84,7 +68,7 @@ def jsondir2mongo(json_dir, database_name,
         else:
 
             response_dict['num_files_attempted'] = fileindex
-            response_dict['num_files_imported'] = mongoindex
+            response_dict['num_files_imported'] = success_index
             response_dict['num_file_errors'] = len(error_list)
             response_dict['code'] = 200
             response_dict['message'] = "Completed without errors."
@@ -92,7 +76,7 @@ def jsondir2mongo(json_dir, database_name,
     except:
         response_dict = {}
         response_dict['num_files_attempted'] = fileindex
-        response_dict['num_files_imported'] = mongoindex
+        response_dict['num_files_imported'] = success_index
         response_dict['code'] = 500
         response_dict['errors'] = [str(sys.exc_info()), ]
         response_dict['message'] = str(sys.exc_info())
@@ -103,49 +87,18 @@ if __name__ == "__main__":
 
     # Parse args
     parser = argparse.ArgumentParser(
-        description='Load in directory which contains JSON docs to MongoDB')
+        description='Load in directory which contains JSON docs and convert it into a single NDJSON file.')
     parser.add_argument(
         dest='input_JSON_dir',
         action='store',
         help='Input the JSON dir to load here')
     parser.add_argument(
-        dest='db_name',
+        dest='output_NDJSON_file',
         action='store',
-        help="Enter the Database name you want to import the JSON to")
-    parser.add_argument(
-        dest='collection_name',
-        action='store',
-        help="Enter the Collection name within the Database specified that you want the JSON to be imported to")
-    parser.add_argument('-d', '--delete', dest='delete', action='store_true',
-                        help='Delete previous collection upon import')
-    parser.add_argument(
-        '--host',
-        dest='host',
-        action='store',
-        default='127.0.0.1',
-        help='Specify host. Default is 127.0.0.1 ')
-    parser.add_argument(
-        '-p',
-        '--port',
-        dest='port',
-        action='store',
-        default=27017,
-        help='Specify port. Default is 27017')
+        help="Enter the output filename")
     args = parser.parse_args()
-    json_dir = args.input_JSON_dir
-    database = args.db_name
-    collection = args.collection_name
-    delete_collection_before_import = args.delete
-    host = args.host
-    port = args.port
 
-    result = jsondir2mongo(
-        json_dir,
-        database,
-        collection,
-        delete_collection_before_import,
-        host,
-        port)
+    result = jsondir2ndjson(args.input_JSON_dir, args.output_NDJSON_file)
 
     # output the JSON transaction summary
     print(json.dumps(result, indent=4))

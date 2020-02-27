@@ -39,7 +39,8 @@ def ndjson2mongo(ndjsonfile, database_name,
             try:
                 if not isinstance(item, type(OrderedDict())):
                     error_message = "File " + \
-                        str(ndjsonfile) + " did not contain a JSON object, i.e. {}."
+                        str(ndjsonfile) + \
+                        " did not contain a JSON object, i.e. {}."
                     error_list.append(error_message)
                 # insert the item/document
                 myobjectid = collection.insert(item)
