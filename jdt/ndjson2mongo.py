@@ -16,8 +16,8 @@ def ndjson2mongo(ndjsonfile, database_name,
                  host,
                  port):
     """Return a response_dict with a summary of ndjson2mongo transaction."""
-    print("Start the import of", ndjsonfile,
-          "into the collection", collection_name, ".")
+    print("Import file", ndjsonfile,
+          "into the MongoDB collection", collection_name, ".")
     # collection_name, "within the database", database_name, "."
 
     response_dict = OrderedDict()
