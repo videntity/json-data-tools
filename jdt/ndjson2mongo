@@ -22,7 +22,7 @@ def ndjson2mongo(ndjsonfile, database_name,
                  delete_collection_before_import,
                  host,
                  port):
-    print("Start the import of", ndjsonfile, "into the collection")
+    print("Importing", ndjsonfile, "into the collection", collection_name)
     # collection_name, "within the database", database_name, "."
 
     response_dict = OrderedDict()
