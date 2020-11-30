@@ -1,28 +1,28 @@
 jdt - JSON Data Tools
 =====================
 
-Version: 0.4.2
+Version: 0.4.6
 
 This repository contains a handful of command-line utilities and related code libraries for
 processing CSV, JSON, and [Newline Delimited JSON].(http://ndjson.org/) files.
 
 It also contains tools for loading then into:
 
-
-* MongoDB
+* MongoDB. This tool should theoretically work with Microsoft Azure Cosmos DB, but it has not be tested.
 * [FHIR](https://www.hl7.org/fhir/) servers.
 
-_Please consider a code contribution for imports into CouchDB, Redis, Elastic Search, etc :-)_
+_Please consider a code contribution for importing into MarkLogic, Microsoft Azure Cosmos DB, CouchDB, Redis, Elastic Search, etc :-)_
 
 
-The command-line utilities are as folloes:
+The command-line utilities are as follows:
 
 * `csv2mongo`           - Converting a CSV into documents directly into a MongoDB database/collection.
 * `json2mongo`          - Convert a JSON file object into a record into a MongoDB database/collection.
-* `jsondir2ndjson`      - Traverse a directory path and convert all JSON documents into a single NDJSON file.  
+* `jsondir2ndjson`      - Traverse a directory path and convert all JSON documents into a single NDJSON file.
+* `jsonlist2ndjson`     - Import a JSON list file and convert it into NDJSON.
 * `ndjson2mongo`        - Import an NDJSON file into a MongoDB database/collection.
 * `ndjsonurl2mongo`     - Import an NDJSON file, at a given URL, into a MongoDB database/collection.
-* `ndjson2fhir`         - Import an NDJSON file into a FHIR server using POST/CREATE (experimental).
+* `ndjson2fhir`         - Import an NDJSON file into a FHIR server using POST/CREATE or PUT/UPDATE.  This now can accept an OAuth2 token.
 * `ndjsonurl2fhir`      - Import an NDJSON file, at a given URL, into a FHIR server using POST/CREATE (experimental).
 * `sftp-ndjson2mongo`   - Download files from SFTP, then import NDJSON and CSV and import them into MongoDB.  
 
@@ -51,11 +51,11 @@ For info about each command type:
     
     `<command> -h`
 
-The general rule is:
+For tools that use MongoDB, you should supply a database and 
 
     <command> <file/dir to load> <db_name> <collection_name>
 
-By default, if you pass in db/collection name that already exists in your MongoDB, the import will only add to it. If you pass the `-d` option to a command, the specified collections will be dropped before importing the new data.
+By default, if you pass in db/collection name that already exists in your MongoDB, the import will only add to it. If you pass the `-d` option to a command, the specified collection contents will be deleted before importing the new data.
 
 Also by default:
 
