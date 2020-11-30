@@ -1,7 +1,7 @@
 jdt - JSON Data Tools
 =====================
 
-Version: 0.4.6
+Version: 0.4.7
 
 This repository contains a handful of command-line utilities and related code libraries for
 processing CSV, JSON, and [Newline Delimited JSON].(http://ndjson.org/) files.
