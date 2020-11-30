@@ -8,3 +8,6 @@ data/
 *.kpf
 .DS_Store
 *.code-workspace
+*.json
+*.ndjson
+*.pem
