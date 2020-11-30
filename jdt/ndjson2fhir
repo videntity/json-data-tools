@@ -29,12 +29,15 @@ if __name__ == "__main__":
         dest='fhir_base_url',
         action='store',
         help="Enter the FHIR base URL where you want to create new new FHIR resources.")
-
+    parser.add_argument('-t', '--token', dest='oauth2_token', action='store',
+                        default=None,
+                        help='Pass a given Bearer token in the Authorization header to the FHIR server.')
+    parser.add_argument('-u', '--update', dest='update', action='store_true',
+                        help='Perfom an HTTP PUT (UPDATE) instead of a POST/CREATE to the the FHIR server.')
+    
     args = parser.parse_args()
-    ndjson_file = args.input_ndjson_file
-    fhir_base_url = args.fhir_base_url
 
-    result = ndjson2fhir(ndjson_file,fhir_base_url)
+    result = ndjson2fhir(args.input_ndjson_file, args.fhir_base_url, args.oauth2_token, args.update)
 
     # output the JSON transaction summary
     print(json.dumps(result, indent=4))

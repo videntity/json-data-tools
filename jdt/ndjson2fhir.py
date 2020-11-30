@@ -5,9 +5,11 @@
 from collections import OrderedDict
 import ndjson
 import requests
+import sys
+import uuid
 
 
-def ndjson2fhir(ndjsonfile, fhir_base_url):
+def ndjson2fhir(ndjsonfile, fhir_base_url, oauth2_token=None, update=False):
     """Return a response_dict with a summary of ndjson2fhir transaction."""
     # print("Start the import of", ndjsonfile, "into", fhir_base_url)
     response_dict = OrderedDict()
@@ -24,23 +26,43 @@ def ndjson2fhir(ndjsonfile, fhir_base_url):
                         str(item) + " did not contain a JSON object, i.e. {}."
                     error_list.append(error_message)
                 # insert the item/document using an HTTP POST to a FHIR server
-                resource_url = "%s%s" % (fhir_base_url, item["resourceType"])
-
-                r = requests.post(resource_url, json=item, headers={
-                                  'Content-type': 'application/json'})
-                if r.status_code not in (201,):
-                    error_message = "Item with ID " + \
-                        item['id'] + " failed to POST/CREATE in the FHIR server."
-                    error_list.append(error_message)
+                if update:
+                    # A PUT
+                    if 'id' not in item.keys():
+                        item['id'] = str(uuid.uuid4())
+                    resource_url = "%s%s/%s" % (fhir_base_url, item["resourceType"], item['id'])
                 else:
-                    ids.append({item['id']: r.json()['id']})
-                    index += 1
-            except:
-                # print(sys.exc_info())
-                error_message = "File " + \
-                    str(item) + " did not contain valid JSON."
+                    # A POST
+                    if 'id' in item.keys():
+                        del item['id']
+                    resource_url = "%s%s" % (fhir_base_url, item["resourceType"])
+                
+                headers = {'Content-type': 'application/json'}
+                if oauth2_token:
+                    headers["Authorization"] = "Bearer %s" % (oauth2_token)
+                if update:
+                    # PUT UPDATE
+                    r = requests.put(resource_url, json=item, headers=headers)
+                    print(resource_url, r.status_code)
+                    if r.status_code not in (200,):
+                        error_message = "Failed to PUT/UPDATE item number %s in the FHIR server." % (index)
+                        error_list.append(error_message)
+                    else:
+                        ids.append({index: r.json()['id']})
+                else:
+                    # POST CREATE
+                    r = requests.post(resource_url, json=item, headers=headers)
+                    if r.status_code not in (201,):
+                        error_message = "Failed to POST/CREATE item number %s in the FHIR server." % (index)
+                        error_list.append(error_message)
+                    else:
+                        ids.append({index: r.json()['id']})
+                    
+            except Exception:
+                print(sys.exc_info())
+                error_message = "File " + str(item) + str(sys.exc_info())
                 error_list.append(error_message)
-
+            index+=1
         if error_list:
             response_dict['file'] = ndjsonfile
             response_dict['fhir_base_url'] = fhir_base_url
