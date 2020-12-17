@@ -1,0 +1,27 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# vim: ai ts=4 sts=4 et sw=4
+# Alan Viars
+
+import argparse
+import sys
+from jdt.fhirbundle2ndjson import fhirbundle2ndjson
+import json
+
+if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser(
+        description='Load in FHIR Bunlde and save Resource entries to an NDJSON file.')
+    parser.add_argument(
+        dest='bundle_file',
+        action='store',
+        help='Input the FHIR Bundle.')
+    parser.add_argument(
+        dest='output_file',
+        action='store',
+        help="Enter the output NDJSON filename")
+    args = parser.parse_args()
+
+    result = fhirbundle2ndjson(args.bundle_file, args.output_file)
+    # output the JSON transaction summary
+    print(json.dumps(result, indent=4))

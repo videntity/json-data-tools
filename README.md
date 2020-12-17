@@ -1,7 +1,7 @@
 jdt - JSON Data Tools
 =====================
 
-Version: 0.4.7
+Version: 0.5.3
 
 This repository contains a handful of command-line utilities and related code libraries for
 processing CSV, JSON, and [Newline Delimited JSON].(http://ndjson.org/) files.
@@ -20,12 +20,13 @@ The command-line utilities are as follows:
 * `json2mongo`          - Convert a JSON file object into a record into a MongoDB database/collection.
 * `jsondir2ndjson`      - Traverse a directory path and convert all JSON documents into a single NDJSON file.
 * `jsonlist2ndjson`     - Import a JSON list file and convert it into NDJSON.
+* `fhirbundle2ndjson`   - Convert the FHIR resources within a FHIR Bundle and output them  to NDJSON.
 * `ndjson2mongo`        - Import an NDJSON file into a MongoDB database/collection.
 * `ndjsonurl2mongo`     - Import an NDJSON file, at a given URL, into a MongoDB database/collection.
 * `ndjson2fhir`         - Import an NDJSON file into a FHIR server using POST/CREATE or PUT/UPDATE.  This now can accept an OAuth2 token.
 * `ndjsonurl2fhir`      - Import an NDJSON file, at a given URL, into a FHIR server using POST/CREATE (experimental).
 * `sftp-ndjson2mongo`   - Download files from SFTP, then import NDJSON and CSV and import them into MongoDB.  
-
+* `split_large_files`   - Split a large CSV, NDJSON or other file into N many lines per file.  
 
 Installation
 ------------
