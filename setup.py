@@ -72,7 +72,7 @@ if len(sys.argv) > 1 and sys.argv[1] == 'bdist_wininst':
 
 setup(
     name="jdt",
-    version="0.5.3",
+    version="0.5.4",
     description="JSON Data Tools",
     long_description="""A collection of scripts for working with CSV, JSON, and NDJSON and importing into MongoDB and FHIR.""",
     author="Alan Viars",
@@ -96,4 +96,5 @@ setup(
         'jdt/jsonlist2ndjson',
         'jdt/split_large_files',
         'jdt/fhirbundle2ndjson',
+        'jdt/fhirbundledownsize',
     ])

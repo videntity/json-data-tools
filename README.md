@@ -1,7 +1,7 @@
 jdt - JSON Data Tools
 =====================
 
-Version: 0.5.3
+Version: 0.5.4
 
 This repository contains a handful of command-line utilities and related code libraries for
 processing CSV, JSON, and [Newline Delimited JSON].(http://ndjson.org/) files.
@@ -27,6 +27,7 @@ The command-line utilities are as follows:
 * `ndjsonurl2fhir`      - Import an NDJSON file, at a given URL, into a FHIR server using POST/CREATE (experimental).
 * `sftp-ndjson2mongo`   - Download files from SFTP, then import NDJSON and CSV and import them into MongoDB.  
 * `split_large_files`   - Split a large CSV, NDJSON or other file into N many lines per file.  
+* `fhirbundledownsize`  - Split a large FHIR bundle into smaller bvundles with N entries per object/file.
 
 Installation
 ------------
@@ -43,7 +44,12 @@ Note: If you use `sudo`, the scripts  will be installed at the
 system level and used by all users. Add  `--upgrade` to the above
 install instructions to ensure you fetch the newest version.
 
-This library assumes you have MongoDB installed and running. See http://docs.mongodb.org/manual/installation/ for more installation and instructions for your OS.
+
+You may also update with this command.
+
+    ~$ sudo pip install jdt --upgrade
+
+The MongoDB functions  assume you have a MongoDB instance installed and running. See http://docs.mongodb.org/manual/installation/ for more installation and instructions for your OS.
 
 General Usage
 -------------
