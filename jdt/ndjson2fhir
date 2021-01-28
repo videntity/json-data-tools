@@ -20,7 +20,7 @@ if __name__ == "__main__":
 
     # Parse args
     parser = argparse.ArgumentParser(
-        description='Load in the NDJSON doc into MongoDB')
+        description='Load an NDJSON document into a FHIR server (via HTTP)')
     parser.add_argument(
         dest='input_ndjson_file',
         action='store',
@@ -32,12 +32,38 @@ if __name__ == "__main__":
     parser.add_argument('-t', '--token', dest='oauth2_token', action='store',
                         default=None,
                         help='Pass a given Bearer token in the Authorization header to the FHIR server.')
-    parser.add_argument('-u', '--update', dest='update', action='store_true',
-                        help='Perfom an HTTP PUT (UPDATE) instead of a POST/CREATE to the the FHIR server.')
-    
-    args = parser.parse_args()
+    parser.add_argument('-a', '--add', dest='add', action='store_true',
+                        help='Add a resource instead of attempting an update. Perfom an HTTP POST (CREATE) instead of a PUT/UPDATE to the the FHIR server.')
 
-    result = ndjson2fhir(args.input_ndjson_file, args.fhir_base_url, args.oauth2_token, args.update)
+    parser.add_argument('-o', '--output-fhir-responses', dest='output_http_response', action='store_true',
+                        help='Output the HTTP response for each attempted FHIR POST/PUT to the console.')
+    parser.add_argument('-c', '--client_id', dest='client_id', action='store',
+                        help='Client ID to fetch an access token. Must also supply client_secret. Depending on FHIR server it may require resource too.')
+    parser.add_argument('-s', '--client_secret', dest='client_secret', action='store',
+                        help='Client_secret to fetch an access token. Must also supply client_id. Depending on FHIR server it may require resource too.')
+    parser.add_argument('-r', '--resource', dest='resource', action='store',
+                        help='Resource identifer used in token request.')
+    parser.add_argument('-f', '--fresh_access_token_in_minutes', dest='fresh_access_token_in_minutes', action='store',
+                        help='Get a fresh access_token in N minutes. Supply an integer.')
+    parser.add_argument('-z', '--authorization_uri', dest='authorization_uri', action='store',
+                        help='authorization_uri for access_token fetch.')
+    args = parser.parse_args()
+    if args.add:
+        update = False
+    else:
+        update = True
+
+    result = ndjson2fhir(args.input_ndjson_file, args.fhir_base_url, 
+                         update,
+                         args.output_http_response,
+                         args.oauth2_token,
+                         args.authorization_uri,
+                         args.client_id,
+                         args.client_secret,
+                         args.resource)
 
     # output the JSON transaction summary
     print(json.dumps(result, indent=4))
+    ndjson2fhir_results_json_file = open("%s-results.json" % (args.input_ndjson_file),'w')
+    ndjson2fhir_results_json_file.write(json.dumps(result, indent=4))
+    ndjson2fhir_results_json_file.close()

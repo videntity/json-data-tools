@@ -10,6 +10,38 @@ import ndjson
 import sys
 from collections import OrderedDict
 
+def jsonlist2ndjson(json_object_list):
+    return ndjson.dumps(json_object_list)
+
+def get_json_list_from_directory(json_dir):
+    json_object_list = []
+    onlyfiles = []
+    for root, dirs, files in os.walk(json_dir):
+        for file in files:
+            if file.endswith(".json") or file.endswith(".js"):
+                onlyfiles.append(os.path.join(root, file))
+    
+    for f in onlyfiles:
+        j = None
+        error_message = ""
+        fh = open(f, 'rU')
+        j = fh.read()
+        fh.close()
+        
+        try:
+            j = json.loads(j, object_pairs_hook=OrderedDict)
+            if not isinstance(j, type(OrderedDict())):
+                error_message = "File " + f + " did not contain a json object, i.e. {}."
+                print(error_message)
+                sys.exit(1)
+        except Exception as e:
+            error_message = "File " + f + " did not contain valid JSON."
+            print(error_message, e)
+            sys.exit(1)
+
+        json_object_list.append(j)
+    return json_object_list
+
 
 def jsondir2ndjson(json_dir, output_filename):
     """Convert all json files under a path into a single ndjson file."""
@@ -83,22 +115,35 @@ def jsondir2ndjson(json_dir, output_filename):
 
     return response_dict
 
+
 if __name__ == "__main__":
 
-    # Parse args
+    # Parse CLI args
     parser = argparse.ArgumentParser(
-        description='Load in directory which contains JSON docs and convert it into a single NDJSON file.')
+        description='Load in directory, which contains JSON documents, with .json or .js extensions, and convert it into a single NDJSON file.')
     parser.add_argument(
-        dest='input_JSON_dir',
+        dest='input_json_dir',
         action='store',
         help='Input the JSON dir to load here')
     parser.add_argument(
-        dest='output_NDJSON_file',
+        dest='output_ndjson_file',
         action='store',
         help="Enter the output filename")
+
+    # load in cli parser ags
     args = parser.parse_args()
+    
+    # get a list of all JSON objects from a local file path. 
+    # 
+    # It gets all .json and .js files recursivly. 
+    object_list = get_json_list_from_directory(args.input_json_dir)
 
-    result = jsondir2ndjson(args.input_JSON_dir, args.output_NDJSON_file)
-
-    # output the JSON transaction summary
-    print(json.dumps(result, indent=4))
+    # Open the output file
+    out_fh = open(args.output_NDJSON_file, 'w')
+    
+    # output the ndjson file.
+    output = jsonlist2ndjson(object_list)
+    out_fh.write(output)
+    
+    # close the file handle
+    out_fh.close()
