@@ -6,6 +6,7 @@
 import argparse
 from itertools import zip_longest
 
+
 def grouper(n, iterable, fillvalue=None):
     "Collect data into fixed-length chunks or blocks"
     # grouper(3, 'ABCDEFG', 'x') --> ABC DEF Gxx
@@ -19,7 +20,6 @@ def split_large_files(filename, number_of_lines_per_file):
             small_filename = '%s_%s' % (filename, format(i * number_of_lines_per_file))
             with open(small_filename, 'w') as fout:
                 fout.writelines(g)
-
 
 
 if __name__ == "__main__":
@@ -38,6 +38,3 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     split_large_files(args.input_file, int(args.number_of_lines_per_file))
-
-
-
