@@ -4,26 +4,38 @@
 # Alan Viars
 
 import argparse
-import json
-from jdt.jsondir2ndjson import jsondir2ndjson
-
+from jdt.jsondir2ndjson import get_json_list_from_directory, jsonlist2ndjson
 
 if __name__ == "__main__":
 
-    # Parse args
+    # Parse CLI args
     parser = argparse.ArgumentParser(
-        description='Load in directory which contains JSON docs and convert it into a single NDJSON file.')
+        description="""Load in directory, which contains JSON documents,
+with .json or .js extensions, and convert it into a single NDJSON file.""")
+
     parser.add_argument(
-        dest='input_JSON_dir',
+        dest='input_json_dir',
         action='store',
         help='Input the JSON dir to load here')
     parser.add_argument(
-        dest='output_NDJSON_file',
+        dest='output_ndjson_file',
         action='store',
         help="Enter the output filename")
+
+    # load in cli parser ags
     args = parser.parse_args()
 
-    result = jsondir2ndjson(args.input_JSON_dir, args.output_NDJSON_file)
+    # get a list of all JSON objects from a local file path.
+    #
+    # It gets all .json and .js files recursivly.
+    object_list = get_json_list_from_directory(args.input_json_dir)
 
-    # output the JSON transaction summary
-    print(json.dumps(result, indent=4))
+    # Open the output file
+    out_fh = open(args.output_ndjson_file, 'w')
+
+    # output the ndjson file.
+    output = jsonlist2ndjson(object_list)
+    out_fh.write(output)
+
+    # close the file handle
+    out_fh.close()
