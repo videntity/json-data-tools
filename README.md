@@ -4,7 +4,7 @@ jdt - JSON Data Tools
 Version: 0.5.6
 
 This repository contains a handful of command-line utilities and related code libraries for
-processing CSV, JSON, NDJSON and importing into MongoDB or FHIR databases.\
+processing CSV, JSON, NDJSON and importing into MongoDB or FHIR.
 
 Contributing
 ------------
