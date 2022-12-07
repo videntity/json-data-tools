@@ -1,26 +1,20 @@
 jdt - JSON Data Tools
 =====================
 
-Version: 0.5.5
+Version: 0.5.6
 
 This repository contains a handful of command-line utilities and related code libraries for
-processing CSV, JSON, and [Newline Delimited JSON].(http://ndjson.org/) files.
-
-It also contains tools for loading then into:
-
-* MongoDB. This tool should theoretically work with Microsoft Azure Cosmos DB, but it has not be tested.
-* [FHIR](https://www.hl7.org/fhir/) servers.
-
+processing CSV, JSON, NDJSON and importing into MongoDB or FHIR databases.\
 
 Contributing
 ------------
 
 `json-data-tools` is free open source software.  All pull requests will be considered.
-_Please consider a code contribution for extending jdt's database import capabilities.
-In addition to MongoDB, it would be useful to import into MarkLogic, Microsoft Azure Cosmos DB, CouchDB, Redis, Elastic Search, etc.  We encourage those vendors to add their support to this library._  
 
 
-The command-line utilities are as follows:
+Commands
+--------
+
 
 * `csv2mongo`           - Converting a CSV into documents directly into a MongoDB database/collection.
 * `json2mongo`          - Convert a JSON file object into a record into a MongoDB database/collection.
@@ -36,24 +30,21 @@ The command-line utilities are as follows:
 * `fhirbundle2mongo`    - Load a FHIR Bundle into a Mongo Database. Each FHIR Resource will be its own collection.
 * `fhirbundledownsize`  - Split a large FHIR Bundles into smaller Bundles with N entries per object/file.
 
+
+
 Installation
 ------------
 
-
-You can install the tool using `pip`.
+You can install the tool using `pip` to install json-data-tools on your system.
 
 To install with pip just type:
 
 
     ~$ sudo pip install jdt
 
+
 Note: If you use `sudo`, the scripts  will be installed at the
-system level and used by all users. Add  `--upgrade` to the above
-install instructions to ensure you fetch the newest version.
-
-You may also update with this command.
-
-    ~$ sudo pip install jdt --upgrade
+system level and used by all users. 
 
 
 General Usage
@@ -68,16 +59,13 @@ For info about each command type:
 MongoDB Configuration
 ---------------------
 
-MongoDB is not required to run most of the tools in this library.
 
-The MongoDB tools do assume you have a MongoDB instance installed and running. See http://docs.mongodb.org/manual/installation/ for more installation and instructions for your OS.
-
-For tools that use MongoDB, you should supply a `database_name` and `collection_name` to the command line tools. For  `csv2mongo` as an example 
+An accesiable MongoDB instance is not required to run MongoDB based commands. See http://docs.mongodb.org/manual/installation/ for more installation and instructions for your OS.For tools that use MongoDB, you should supply a `database_name` and `collection_name` to the command line tools. For  `csv2mongo` as an example 
 
     ~$ csv2mongo [CSVFILE] [DATABASE] [COLLECTION] 
 
 By default, if you pass in db/collection name that already exists in your MongoDB, the import will only add to it. If you pass the `-d` option to a command, the specified collection contents will be deleted before importing the new data.
-The default value for `host` is `127.0.0.1` and the `port` is `27017`.
+The default value for `host` is the localhost (`127.0.0.1`) and the `port` is `27017`.
     
 These options can be changed with the --host and --port options respectively.
 
