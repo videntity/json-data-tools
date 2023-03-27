@@ -45,7 +45,7 @@ def json2mongo(jsonfile, database_name, collection_name,
 
     if not error_list:
 
-        myobjectid = collection.insert(j)
+        myobjectid = collection.insert_one(j)
         mongoindex += 1
 
         if error_list:

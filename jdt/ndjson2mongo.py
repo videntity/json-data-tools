@@ -8,6 +8,7 @@ import json
 from collections import OrderedDict
 from pymongo import MongoClient
 import ndjson
+import sys
 
 
 def ndjson2mongo(ndjsonfile, database_name,
@@ -16,8 +17,7 @@ def ndjson2mongo(ndjsonfile, database_name,
                  host,
                  port):
     """Return a response_dict with a summary of ndjson2mongo transaction."""
-    print("Import file", ndjsonfile,
-          "into the MongoDB collection", collection_name, ".")
+    print("Import file", ndjsonfile, "into MongoDB database / collection", database_name, "/", collection_name, ".")
     # collection_name, "within the database", database_name, "."
 
     response_dict = OrderedDict()
@@ -35,7 +35,7 @@ def ndjson2mongo(ndjsonfile, database_name,
     with open(ndjsonfile) as f:
         data = ndjson.load(f, object_pairs_hook=OrderedDict)
         for item in data:
-            # print("item",item)
+            # print("item",type(item))
             try:
                 if not isinstance(item, type(OrderedDict())):
                     error_message = "File " + \
@@ -43,12 +43,12 @@ def ndjson2mongo(ndjsonfile, database_name,
                         " did not contain a JSON object, i.e. {}."
                     error_list.append(error_message)
                 # insert the item/document
-                myobjectid = collection.insert(item)
+                myobjectid = collection.insert_one(item)
                 mongoindex += 1
 
             except:
-                # print(sys.exc_info())
-                error_message = "File " + \
+                print(sys.exc_info())
+                error_message = "Filezzz " + \
                     str(item) + " did not contain valid JSON."
                 error_list.append(error_message)
 
@@ -77,15 +77,15 @@ if __name__ == "__main__":
 
     # Parse args
     parser = argparse.ArgumentParser(
-        description='Load in the NDJSON doc into MongoDB')
+        description='Load an NDJSON doc into MongoDB. (For large loads, please batch if necessary based on your system.)')
     parser.add_argument(
         dest='input_ndjson_file',
         action='store',
-        help='Input the NDJSON file to load here')
+        help='Input file to load in NDJSON format.')
     parser.add_argument(
         dest='db_name',
         action='store',
-        help="Enter the Database name you want to import the JSON to")
+        help="Enter the MongoDB database name you want to import the NDJSON into")
     parser.add_argument(
         dest='collection_name',
         action='store',

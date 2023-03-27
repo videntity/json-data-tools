@@ -5,7 +5,7 @@
 
 import argparse
 import json
-from jdt.csv2mongo import csv2mongo
+from .csv2mongo import csv2mongo
 
 
 

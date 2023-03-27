@@ -8,8 +8,9 @@ processing CSV, JSON, and [Newline Delimited JSON].(http://ndjson.org/) files.
 
 It also contains tools for loading then into:
 
-* MongoDB. This tool should theoretically work with Microsoft Azure Cosmos DB, but it has not be tested.
-* [FHIR](https://www.hl7.org/fhir/) servers.
+* MongoDB. This tool should theoretically work with Microsoft Azure Cosmos DB, but it has not been tested.  Contributions along those lines are encouraged.
+
+* [FHIR](https://www.hl7.org/fhir/) servers.  This tool has been tested with HAPI using FHIR R4.
 
 
 Contributing
@@ -17,7 +18,10 @@ Contributing
 
 `json-data-tools` is free open source software.  All pull requests will be considered.
 _Please consider a code contribution for extending jdt's database import capabilities.
-In addition to MongoDB, it would be useful to import into MarkLogic, Microsoft Azure Cosmos DB, CouchDB, Redis, Elastic Search, etc.  We encourage those vendors to add their support to this library._  
+In addition to MongoDB, it would be useful to import into MarkLogic, Microsoft Azure Cosmos DB, CouchDB, Redis, Elastic Search, etc.  We encourage those vendors to add their support to this library._
+
+Command Line Utilities
+----------------------
 
 
 The command-line utilities are as follows:
@@ -80,6 +84,11 @@ By default, if you pass in db/collection name that already exists in your MongoD
 The default value for `host` is `127.0.0.1` and the `port` is `27017`.
     
 These options can be changed with the --host and --port options respectively.
+
+
+Command Reference
+=================
+
 
 csv2mongo
 ---------
